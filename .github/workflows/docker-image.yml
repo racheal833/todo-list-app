@@ -1,0 +1,38 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+     runs-on: ubuntu-latest
+     steps:
+       - name: Checkout Code
+         uses: actions/checkout@v7
+
+       - name: Set up Node.js Environment
+         uses: actions/setup-node@v7
+         with:
+           node-version: '24'
+           cache: 'yarn'
+
+       - name: Install Dependencies
+         run: yarn install --immutable
+
+       - name: Run Tests
+         env:
+           SQLITE_DB_LOCATION: ./tmp/todos/todo.db
+         run: yarn test
+
+         
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the Docker image
+        run: docker build -t todo_app:v$(date +%s) .  
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
