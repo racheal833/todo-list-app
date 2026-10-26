@@ -1,4 +1,4 @@
-)name: Docker Image CI
+name: Docker Image CI
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ "main" ]
 
-jobs:
+ jobs:
   test:
      runs-on: ubuntu-latest
      steps:
